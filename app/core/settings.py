@@ -4,8 +4,8 @@ from functools import lru_cache
 
 
 class Settings(BaseSettings):
-    DB_URL: str = "postgresql://postgres:8645@localhost/un"
-    DEBUG: int = int(os.getenv("DEBUG",1))
+    DB_URL: str
+    DEBUG: int
 
     class Config:
         env_file = ".env"
