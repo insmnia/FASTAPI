@@ -1,8 +1,8 @@
 from typing import Optional, Union
 from fastapi import APIRouter, Depends, HTTPException
-from app.core.schemes.university import University, UniversityCreate
+from app.schemes.university import University, UniversityCreate
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED
-from app.core.schemes.university import (
+from app.schemes.university import (
     University as UniversityScheme,
     UniversityCreate as UnivesityCreateScheme
 )
@@ -15,6 +15,7 @@ from app.crud.university import (
     get_universities_by_country_and_name,
     get_universities_by_name
 )
+from app.core.utils import check_university_exists
 
 router = APIRouter()
 
@@ -40,7 +41,5 @@ def create(
     university: UnivesityCreateScheme,
     session: Session = Depends(get_db)
 ):
-    db_university = get_universities_by_name(session,name=university.name)
-    if db_university:
-        raise HTTPException(status_code=400,detail="University with this name already exists")
+    check_university_exists(session,university.name)
     create_university(session,university)
